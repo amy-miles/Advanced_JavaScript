@@ -48,7 +48,7 @@
         const gameDifficulty = ["Easy","Moderate","Difficult","Hard"];
 
         function createRadioButtons(){
-            const difficultyRating = document.getElementById("difficultyRating");
+            let difficultyRating = document.getElementById("difficultyRating");
             difficultyRating.appendChild(document.createElement('br'));
             for (let difficulty of gameDifficulty){
                 let label = document.createElement("label");
@@ -69,7 +69,7 @@
         const gameOptions = ["Good for Kids","Multiplayer","Fast Play","Long Game","Solitare"];
 
         function createCheckBoxes(){
-            const gameOptionsContainer = document.getElementById("gameOptions");
+            let gameOptionsContainer = document.getElementById("gameOptions");
             gameOptionsContainer.appendChild(document.createElement('br'));
             for (let option of gameOptions){
                 let label = document.createElement("label");
@@ -98,33 +98,33 @@
             document.querySelectorAll(".error").forEach(el => el.remove());
 
             //Validate Game Name
-            const gameName = document.getElementById("gameName").value.trim();
+            let gameName = document.getElementById("gameName").value.trim();
             if (gameName === "" || gameName.length > 50){
                 alert("Must enter a game name and less than 50 characters.")
                 isValid = false;
             }
             //Validate Game Type
-            const gameType = document.getElementById("gameType").value;
+            let gameType = document.getElementById("gameType").value;
             if (gameType === ""){
                 alert("Must select a game type.");
                 isValid = false;
             }
             //Validate Number of Players
-            const gamePlayers = document.getElementById("gamePlayers").value.trim();
-            const playerCount = parseInt(gamePlayers, 10);
+            let gamePlayers = document.getElementById("gamePlayers").value.trim();
+            let playerCount = parseInt(gamePlayers, 10);
             if (isNaN(playerCount) || playerCount < 1 || playerCount > 20){
                 alert("Must be a whole number between 1 and 20.");
                 isValid = false;
             }
             //Validate Difficulty Rating
-            const difficultySelected = document.querySelector("input[name='difficulty']:checked");
+            let difficultySelected = document.querySelector("input[name='difficulty']:checked");
             if (!difficultySelected){
                 alert("Difficulty rating must be selected.");
                 isValid = false;
             }
             //Validate Game Options
-            const fastPlay = document.querySelector("input[value='Fast Play']").checked;
-            const longGame = document.querySelector("input[value='Long Game']").checked;
+            let fastPlay = document.querySelector("input[value='Fast Play']").checked;
+            let longGame = document.querySelector("input[value='Long Game']").checked;
             if (fastPlay && longGame){
                 alert("You can't select both Fast Play and Long Game.");
                 isValid = false;
@@ -201,7 +201,7 @@
 
         ///////////////////Disply Game Library////////////////////
         function displayGameLibrary() {
-            const librarySection = document.querySelector('.displayGameLibrary');
+            let librarySection = document.querySelector('.displayGameLibrary');
             librarySection.innerHTML = ''; // Clear existing content
 
             if (gameLibrary.length === 0) {
@@ -210,9 +210,9 @@
             }
 
             // Create a list to display games
-            const ul = document.createElement('ul');
+            let ul = document.createElement('ul');
             gameLibrary.forEach(game => {
-                const li = document.createElement('li');
+                let li = document.createElement('li');
                 li.innerHTML = `
                     <strong>Name:</strong> ${game.name} <br>
                     <strong>Type:</strong> ${game.type} <br>
@@ -231,8 +231,9 @@
         }
 
         function startOver(){
-            const librarySection = document.querySelector('.displayGameLibrary');
+            let librarySection = document.querySelector('.displayGameLibrary');
             librarySection.innerHTML = ''; 
+            clearGameForm();
         }
         function addStartOverListener(){
             document.getElementById("startOverButton").onclick = function(){
