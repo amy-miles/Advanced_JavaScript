@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDV321 Advanced JavaScript</title>
+    <style>
+        #container {
+            background-color: blanchedalmond;
+            width:70%;
+            margin-left:auto;
+            margin-right:auto;
+            padding:5px;
+        }
+
+        section {
+            display:flex;
+            justify-content: center;
+        }
+
+        .leftSide, .rightSide {
+            border:thin solid brown;
+            width:50%;
+            padding-left:15px;         
+        }
+    </style>
+
+
+
+    <!-- Teams Functionality -->
+    <script>
+        const defaultTeamNames = ["Chiefs","Raiders","Cubs"];
+        let teamNames = [...defaultTeamNames];
+
+        function displayTeamSelected(){
+            let teamSelected = document.getElementById("teamNames").value;            
+            let teamDisplay = document.getElementById("outputName");
+            teamDisplay.innerHTML = teamSelected;
+        }
+
+        function addTeamNameToArray(){
+            let newTeamName = document.getElementById("newTeamName").value;
+            teamNames.push(newTeamName);
+            updateTeamDropdown();
+            console.log("Team added: " , newTeamName);
+        }
+
+        function updateTeamDropdown(){
+            let teamSelect = document.getElementById("teamNames");
+            let newOption = document.createElement("option");
+            let latestTeam = teamNames[teamNames.length - 1];
+            newOption.value = latestTeam;
+            newOption.text = latestTeam;
+            teamSelect.appendChild(newOption);
+        }
+
+        function resetAll(){
+            clearOptions();
+            document.getElementById('outputProduct').innerHTML = "";
+            displayCookies();
+            document.getElementById('displayCookies').checked = false;
+            document.getElementById('displayCandy').checked = false;
+
+            document.getElementById("teamForm").reset();
+            document.getElementById("teamNames").innerHTML = "";
+            
+            // Repopulate the dropdown using createElement() instead of document.write()
+            let teamSelect = document.getElementById("teamNames");
+            let defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "Select a team";
+            teamSelect.appendChild(defaultOption);
+
+            defaultTeamNames.forEach(function (team) {
+                let option = document.createElement("option");
+                option.value = team;
+                option.text = team;
+                teamSelect.appendChild(option);
+            });
+
+            document.getElementById("outputName").innerHTML = "";            
+        }
+
+        function addTeamSelectListener(){
+            document.getElementById("teamNames").addEventListener("change", function(){
+                displayTeamSelected();
+            });
+        }
+
+        function addNewTeamNameListener(){
+            document.querySelector('input[type="submit"]').addEventListener("click", function(event){
+                event.preventDefault();
+                addTeamNameToArray();
+            })
+        }
+
+        function addResetListener(){
+            document.querySelector('input[type="reset"]').addEventListener("click", function(){
+                resetAll();
+            })
+        }
+
+    </script>
+    <!-- Cookies or Candy Functionality -->
+    <script>
+        const cookies = ["Chocolate Chip Cookie", "Sugar Cookie", "Peanut Butter Cookie"];
+        const candies = ["M&Ms","Baby Ruth","Snickers"];
+
+        function clearOptions(){
+            const selectElement = document.getElementById("productDisplay");
+            while(selectElement.options.length > 1){
+                selectElement.remove(selectElement.options.length - 1);
+            }
+        }
+
+        function displaySelected(){
+            const displayArea = document.getElementById('outputProduct');
+            const selectElement = document.getElementById('productDisplay');
+            const selectedItem = selectElement.options[selectElement.selectedIndex].text;
+            displayArea.innerHTML = selectedItem;
+        }
+
+        function displayCookies(){
+            clearOptions();
+            const selectElement = document.getElementById("productDisplay");
+            //console.log(displayArea);
+            cookies.forEach((cookie) => {
+                let optionObj = document.createElement("option");
+                optionObj.text = cookie;
+                optionObj.value = cookie;
+                selectElement.add(optionObj);
+                //console.log(optionObj);                
+            });            
+        }
+
+        function displayCandy(){
+            clearOptions();
+            const selectElement = document.getElementById("productDisplay");
+            candies.forEach((candy) => {
+                let optionObj = document.createElement("option");
+                optionObj.text = candy;
+                optionObj.value = candy;
+                selectElement.add(optionObj);
+            });
+        }
+
+        function addRadioListener(){
+            document.getElementById('displayCookies').addEventListener('change', function() {
+                displayCookies();          
+            });
+            document.getElementById('displayCandy').addEventListener('change', function() {
+                displayCandy();          
+            });
+        } 
+        
+        function addSelectListener(){
+            const selectElement = document.getElementById('productDisplay');
+            selectElement.addEventListener('change',displaySelected);
+        }
+    </script>
+    <script>
+        function pageSetup(){
+            addTeamSelectListener();
+            addNewTeamNameListener();
+            addResetListener();
+            displayCookies();
+            addRadioListener();
+            addSelectListener();
+        }
+    </script>
+
+</head >
+<body onload="pageSetup()">
+    <div id="container">
+        <header>
+
+        </header>
+        <main>
+            <h1>WDV321 Advanced JavaScript</h1>
+            <h2>Dynamic Content - Drop Down Lists</h2>
+            <p>The goals of this assignment:
+                <ol>
+                    <li>Demonstrate how to dynamically populate a select element using the document.write() technique</li>
+                    <li>Demonstrate how to dynamically populate a select element using the createElement() technique</li>
+                    <li>Demonstrate how to dynamically add an option to a select element</li>
+                    <li>Demonstrate how to dynamically change the options of a select element</li>
+                </ol>
+            </p>  
+
+            <section>
+                <div class="leftSide">
+                    <h3>Team Names</h3>
+                    <div>
+                        <label for="teamNames">Team Names</label>
+                        <select name="teamNames" id="teamNames">
+                            <option value="">Select a team</option>
+                            <script>
+                                teamNames.forEach(team => {
+                                    document.write('<option value="' + team + '">' + team + '</option>');
+                                });                                
+                            </script>
+                        </select>
+                        <p>Team Name: <span id="outputName"></span></p>
+                    </div>
+                    <div>
+                        <form method="post" action="#" id="teamForm">
+                            <label for="newTeamName">New Team Name: </label>
+                            <input type="text" name="newTeamName" id="newTeamName">
+                        </form>
+                        <p>
+                            <input type="submit" value="Add Team Name">
+                            <input type="reset">
+                        </p>
+                    </div> 
+                    <div>
+                        <h4>Instructions:</h4>
+                        <ol>
+                            <li>Use document.write() and the teamNames array to populate the teamNames select element.</li>
+                            <li>When a team is selected display the selected name next to 'Team Name:'' on the page.</li>
+                            <li>When the Add Team Name button is clicked add the name entered in the textfield to the teamNames select element.</li>
+                            <li>The reset button should reset the fields to their original values.</li>
+                        </ol>
+                    </div>                   
+                </div>
+                <div class="rightSide">
+                    <h3>Cookies or Candy?</h3>
+                    <div>
+                        <label for="productDisplay">Products: </label>
+                        <select name="productDisplay" id="productDisplay">
+                            <option value="none">Select a Product</option>
+                        </select>
+                        <p>
+                            Selected Product: <span id="outputProduct"></span>
+                        </p>
+                    </div>
+                    <p>
+                        <label for="displayCookies">Cookies: </label>
+                        <input type="radio" name="chooseProduct" id="displayCookies">
+                        <br>
+                        <label for="displayCandy">Candy: </label>
+                        <input type="radio" name="chooseProduct" id="displayCandy">
+                    </p>
+                    <div>
+                        <h4>Instructions:</h4>
+                        <ol>
+                            <li>Use the createElement() technique and the cookies array to populate the productDisplay select element.</li>
+                            <li>When a product is selected is selected, display the selected name next to 'Selected Product:'' on the page.</li>
+                            <li>Change the contents of the productDisplay based on which radio button is selected.</li>
+                            <li>The reset button should reset the fields to their original values.</li>
+                        </ol>
+                    </div>    
+                </div>
+
+            </section>
+
+        </main>
+        <footer>
+
+        </footer>
+    </div>
+
+</body>
+</html>
