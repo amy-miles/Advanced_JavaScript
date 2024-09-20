@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>WDV321 Advanced Javascript</title>
+	<style>
+		.displayContainer {
+			border:thin solid black;
+			width:50%;
+			margin-left:20px;
+			padding:10px;
+		}
+		.complaintDiv, .techProbDiv, .prodIssuesDiv{
+			display: none;
+		}
+	</style>
+	<script>
+		//data for lists
+		let complaintList = ["Product not received","Product broken","Wrong product","Not as described"];
+		let technicalList = ["No power","Doesn't connect","Malfunctioning","Not compatible"];
+		let issuesList = ["Wrong color","Wrong size","Missing parts","Damaged"];
+
+		const displayContainer = document.querySelector(".displayContainer");
+
+		function createComplaintDiv(){
+			const complaintDiv = document.createElement("div");
+			complaintDiv.setAttribute("class", "complaintDiv");
+
+			let divLabel = document.createElement("label");
+			divLabel.innerHTML = "Make a selection: ";
+			complaintDiv.appendChild(divLabel);
+
+			let divSelect = document.createElement("select");
+			divSelect.setAttribute("name","complaintType");
+			divSelect.setAttribute("id","complaintType");
+			divLabel.appendChild(divSelect);
+
+			// default option
+			let optionObj = document.createElement("option")
+			optionObj.text = "Select a complaint";
+			divSelect.add(optionObj);
+
+			for(let x=0;x<complaintList.length;x++){
+                let optionObj = document.createElement("option");                
+                optionObj.text = complaintList[x];                
+                divSelect.add(optionObj);              
+                
+            } 
+			let temp = document.querySelector(".displayContainer");
+			
+			temp.appendChild(complaintDiv);
+		}
+
+		function createTechProbsDiv(){
+			const techProbsDiv = document.createElement("div");
+			techProbsDiv.setAttribute("class", "techProbDiv");
+
+			let divLabel = document.createElement("label");
+			divLabel.innerHTML = "Make a selection: ";
+			techProbsDiv.appendChild(divLabel);
+			techProbsDiv.appendChild(document.createElement("br"));
+
+			for (let i = 0; i < technicalList.length; i++){
+				let checkboxLabel = document.createElement("label");
+				checkboxLabel.innerHTML = technicalList[i];
+
+				let checkbox = document.createElement("input");
+				checkbox.setAttribute("type", "checkbox");
+				checkbox.setAttribute("name", "techProblem");
+				checkbox.setAttribute("value", technicalList[i]);
+
+				techProbsDiv.appendChild(checkbox);
+				techProbsDiv.appendChild(checkboxLabel);
+				techProbsDiv.appendChild(document.createElement("br"));
+			}
+			let temp = document.querySelector(".displayContainer");
+			temp.appendChild(techProbsDiv);			
+		}
+
+		function createProdIssuesDiv(){
+			const productIsuesDiv = document.createElement("div");
+			productIsuesDiv.setAttribute("class", "prodIssuesDiv");
+
+			let divLabel = document.createElement("label");
+			divLabel.innerHTML = "Select Product Issue: ";
+			productIsuesDiv.appendChild(divLabel);
+			productIsuesDiv.appendChild(document.createElement("br"));
+
+			for(let i = 0; i < issuesList.length; i++){
+				let radioLabel = document.createElement("label");
+				radioLabel.innerHTML = issuesList[i];
+
+				let radio = document.createElement("input");
+				radio.setAttribute("type", "radio");
+				radio.setAttribute("name", "productIssue");  // same name to group them
+				radio.setAttribute("value", issuesList[i]);
+
+				productIsuesDiv.appendChild(radio);
+				productIsuesDiv.appendChild(radioLabel);
+				productIsuesDiv.appendChild(document.createElement("br"));
+			}
+			let temp = document.querySelector(".displayContainer");
+			temp.appendChild(productIsuesDiv);
+		}
+
+		function showDiv(){
+			document.querySelector(".complaintDiv").style.display = "none";
+    		document.querySelector(".techProbDiv").style.display = "none";
+    		document.querySelector(".prodIssuesDiv").style.display = "none";
+
+			let contactType = document.getElementById("contactType").value;
+
+			if (contactType === "C"){
+				document.querySelector(".complaintDiv").style.display = "block";
+			}
+			if (contactType === "T"){
+				document.querySelector(".techProbDiv").style.display = "block";
+			}
+			if (contactType === "P"){
+				document.querySelector(".prodIssuesDiv").style.display = "block";
+			}
+		}
+
+		function addSelectListener(){
+            const selectElement = document.getElementById('contactType');
+            selectElement.addEventListener('change',showDiv);
+        }
+
+
+	</script>
+	<script>
+		function pageSetup(){
+			createComplaintDiv();
+			createTechProbsDiv();
+			createProdIssuesDiv();
+			addSelectListener();
+		}
+	</script>
+</head>
+
+<body onload="pageSetup()">
+	<h1>WDV321 Advanced Javascript</h1>
+	<h2>Dynamic Structure -  Display Property Exercise</h2>
+<p>Use this page as the basis for your assignment. You are welcome to change the content, layout and style of this page as desired. </p>
+
+<p>Create the following content areas on the page.</p>
+	<ol>
+	  <li>Create a div that contains a new drop down list with at least four common Complaints to a company. </li>
+	  <li>Create a div that contains four Technical Problems displayed as a  set of checkboxes. </li>
+	  <li>Create a div that contains four Product Issues displayed as a set of radio buttons.</li>
+	  <li>Use the display property to remove these content containers from the page.</li>
+    </ol>
+	<p>
+		Based on the selection from the &quot;Reason For Contact&quot; drop down, dynamically 
+		display the requested content in the Display Container section. For this exercise use 
+		the CSS display property to show/remove the requested content areas.
+	</p>
+	<h4>Customer Service Complaints:</h4>
+	<p>
+		<label>Reason For Contact:
+		  <select name="contactType" id="contactType">
+			<option value="">Select Reason</option>
+			<option value="C">Complaints</option>
+			<option value="T">Technical Problems</option>
+			<option value="P">Product Issues</option>
+		  </select>
+		</label>
+  </p>
+	<section class="displayContainer">
+		<p> 
+
+		</p>
+	</section>
+	<p> </p>
+	<p>&nbsp;</p>
+</body>
+</html>
