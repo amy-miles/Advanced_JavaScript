@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        
+
+
+
+    </script>
+
+</head>
+<body>
+
+    <label for="gemSelect">Choose a gemstone:</label>
+    <select name="gems" id="gemSelect">
+        <script>
+            const gemsList = ["diamond", "sapphire", "ruby"];
+            document.write("<option value=''>Choose an option</option>");
+            for(let x=0; x<gemsList.length; x++){
+                document.write('<option value="' + gemsList[x] + '">' + gemsList[x] + '</option>');
+            }
+        </script>
+    </select>
+
+    <fieldset>
+        <legend>Select a metal:</legend>
+        <script>
+        const metalList = ["Yellow Gold", "White Gold", "Platinum"];
+        const metalDesc = ["ygold", "wgold", "plat"];
+        metalDesc.forEach((element, index) => {
+            document.write("<div>");
+            document.write('<input type="radio" id="' + element + '" name="metals" value="' + element + '">');
+            document.write('<label for="' + element + '">' + metalList[index] + '</label>');
+            document.write("</div>");
+        });        
+        </script>
+    </fieldset>
+
+    <script>
+        document.write("<div>");
+        document.write("<h3>Hello Professor Gullion</h3>");
+        document.write("<p>Prof. Gullion GitHub Page: <a href='https://github.com/jhgullion' target='_blank'>Visit jhgullion's GitHub</a></p>");
+        document.write("</div>");
+    </script>
+</body>
+</html>
