@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-4 Dynamically Created Content</title>
+    <style>
+        .formattedDiv{
+            border: 2px solid black; 
+            padding: 10px;           
+            margin: 10px;           
+            width: 200px;            
+            height: auto; 
+        }
+    </style>
+    <script>
+        function createDropDown(){
+            const dropdownDisplay = document.getElementById("dropdown_section");
+            let gems = ["Diamond", "Sapphire", "Ruby"];
+
+            const gemsDiv = document.createElement("div");
+            gemsDiv.setAttribute("class", "gemsDiv");
+
+            let divLabel = document.createElement("label");
+            divLabel.innerHTML= "Make a selection:";
+            gemsDiv.appendChild(divLabel);
+
+            let divSelect = document.createElement("select");
+            divSelect.setAttribute("name", "Gems");
+            divSelect.setAttribute("id", "Gems");
+            divLabel.appendChild(divSelect);
+
+            //default
+            let optionObj = document.createElement("option");
+            optionObj.text = "Select a gemstone:";
+            divSelect.add(optionObj);
+
+            gems.forEach(gem => {
+                let optionObj = document.createElement("option");                
+                optionObj.text = gem;                
+                divSelect.add(optionObj);  
+            });
+
+            dropdownDisplay.appendChild(gemsDiv);
+        }
+
+        function createRadioButtons(){
+            
+            let metals = ["Yellow Gold", "White Gold", "Platinum"];
+
+            const metalsDiv = document.createElement("div");
+            metalsDiv.setAttribute("class", "metalsDiv");
+
+            let divLabel = document.createElement("label");
+			divLabel.innerHTML = "Select a metal: ";
+			metalsDiv.appendChild(divLabel);
+			metalsDiv.appendChild(document.createElement("br"));
+
+            metals.forEach(metal => {
+                let radioLabel = document.createElement("label");
+                radioLabel.innerHTML = metal;
+
+                let radio = document.createElement("input");
+                radio.setAttribute("type", "radio");
+                radio.setAttribute("name", "metals");
+                radio.setAttribute("value", metal);
+                
+                metalsDiv.appendChild(radio);
+                metalsDiv.appendChild(radioLabel);
+                metalsDiv.appendChild(document.createElement("br"));
+            });
+            const radioDisplay = document.getElementById("radio_section");
+            radioDisplay.appendChild(metalsDiv);
+        }
+
+        function createFormattedDiv(){
+            const formattedDiv = document.createElement("div");
+            formattedDiv.setAttribute("class", "formattedDiv");
+
+            let imageP = document.createElement("p");
+            let image = document.createElement("img");
+            image.setAttribute("src", "first_ring.jpg");
+            image.setAttribute("alt","First Diamond Ring Image");
+            image.setAttribute("width", "200");
+            imageP.appendChild(image);
+
+            formattedDiv.appendChild(imageP);
+
+            let info = document.createElement("p");
+            info.innerHTML = "It is said that the first diamond engagement ring was given by Archduke Maximillian of Austria to Mary of Burgundy in 1477. And it was ugly."
+            formattedDiv.appendChild(info);
+            const infoSection = document.getElementById("formatted_div_section");
+            infoSection.appendChild(formattedDiv);
+        }
+
+
+
+        function pageSetup(){
+            createDropDown();
+            createRadioButtons();
+            createFormattedDiv();
+        }
+    </script>
+</head>
+<body onload="pageSetup()">
+    <h1>Web Dev 321</h1>
+    <h3>2-4 Dynamically Created Content</h3>
+    <p>
+        Use the createElement( ) technique to dynamically create and add the following elements on a page
+    </p>
+    <ul>
+        <li>A drop down list with three options including a default option</li>
+        <li>A set of radio buttons with corresponding labels and value attributes</li>
+        <li>A formatted div element with content </li>
+    </ul>
+
+    <section id="dropdown_section"></section>
+    <section id="radio_section"></section>
+    <section id="formatted_div_section"></section>
+
+</body>
+</html>
