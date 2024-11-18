@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* CSS for card styling */
+        .student-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 8px;
+            width: 250px; /* Fixed width for consistent layout */
+            float: left; /* Floats each card to the left */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script>
+        let fileNames = ["900006361.js", "900668871.js", "903998004.js"]; // Array of filenames
+
+        function getData() {
+            const studentDataDiv = document.getElementById("studentDataDiv");
+            studentDataDiv.innerHTML = ""; // Clear previous data
+            
+            fileNames.forEach(fileName => {
+                let requestObject = new XMLHttpRequest();
+                
+                requestObject.onreadystatechange = function() {
+                    if (requestObject.readyState == 4 && requestObject.status == 200) {
+                        let studentJSONObject = requestObject.responseText;
+                        let studentObject = JSON.parse(studentJSONObject);
+
+                        let studentInfoDiv = document.createElement("div");
+                        studentInfoDiv.classList.add("student-card"); // Card styling without overwriting other classes
+
+                        studentInfoDiv.innerHTML = `
+                            <p>ID: ${studentObject.student_id}</p>
+                            <p>Name: ${studentObject.student_first_name} ${studentObject.student_last_name}</p>
+                            <p>Major: ${studentObject.student_major}</p>
+                            <p>Credits: ${studentObject.student_credits}</p>
+                            <p>GPA: ${studentObject.student_gpa}</p>
+                            <p>Registration Date: ${studentObject.student_registration_date}</p>
+                            <hr>
+                        `;
+
+                        studentDataDiv.appendChild(studentInfoDiv);
+                    }
+                };
+
+                requestObject.open("GET", fileName, true);
+                requestObject.send();
+            });
+        }
+
+        // Clear function to empty the student data div
+        function clearData() {
+            document.getElementById("studentDataDiv").innerHTML = ""; // Clears the content
+        }
+
+    </script>
+
+</head>
+<body>
+    <h1>WDV321 ADV JS</h1>
+    <h3>AJAX Call - Example</h3>
+    <p>
+        <button onclick="getData()">Get Student Data</button>
+        <button onclick="clearData()">Clear Data</button>
+    </p>
+    <div id="studentDataDiv"></div>
+</body>
+</html>
