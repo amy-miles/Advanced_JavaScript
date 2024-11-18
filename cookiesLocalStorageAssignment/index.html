@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDV321 Advanced JavaScript</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: burlywood;
+        }
+
+        #container {
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+            background-color: chocolate;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        main {
+            display: flex;
+        }
+
+        main section {
+            width: 50%;
+            border: thin solid black;
+
+        }
+
+        section h2,
+        section h3 {
+            text-align: center;
+        }
+
+        form {
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Styles for the dynamically created Sign In div */
+        #signInDiv {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            width: 50%;
+        }
+
+        footer p {
+            text-align: center;
+        }
+    </style>
+    <script>
+        //Instructions:  
+        //1. Create a JavaScript object called eventRegistration.  This object will hold one or more registrations
+        //  each registration will have a name, email, phone and registration date (use the current date)
+        //
+        //2. Create a hit counter that will record each time somebody comes to this page.  Store the hit counter in a cookie.
+        //  Each time somebody comes to this page display the current value of the hit counter in the next to "Current Activity:"
+
+        //Sign In button:
+        //When the sign in form is clicked the following will happen
+        //  a. Somewhere on the page display a form to accept the username and password.  Use one of methods we reviewed
+        //      to dynamically display the form when needed.
+        //  b. When that form is selected compare the input to the contents of the membersInfo object. 
+        //  c. If you find a match in the membersInfo object create a cookie called authorizedUser with the username as its value.
+
+
+        let membersInfo = {
+            memberUserNames: [
+                "A1D2C4",
+                "B2D4C6",
+                "B3C2D1"
+            ]
+        }
+    </script>
+    <script src="cookie-utils.js"></script>
+    <script src="Registration.js"></script>
+    <script>
+        // Current year in footer
+        function currentYear() {
+            const currentYear = new Date().getFullYear();
+            document.getElementById("currentYear").textContent = currentYear;
+        }
+        // Increment hit counter
+        function incrementHitCount() {
+            //get cookie 
+            let hitCount = getCookie("hitCounter");
+            //if exists, increment, else create
+            if (hitCount) {
+                hitCount = parseInt(hitCount) + 1;
+            } else {
+                hitCount = 1;
+            }
+            //overwrite cookie 10 year cookie
+            addCookie("hitCounter", hitCount, 3650);
+            //display
+            document.getElementById("hitCount").innerHTML = hitCount;
+        }
+
+        const eventRegistration = {
+            registrations: [],
+
+            // Add a new registration
+            addRegistration(registration) {
+                this.registrations.push(registration);
+                this.saveToLocalStorage();
+            },
+
+            // Save registrations to localStorage
+            saveToLocalStorage() {
+                localStorage.setItem("eventRegistrations", JSON.stringify(this.registrations));
+            },
+        };
+
+        //Event Registration
+        function registerForEvent() {
+            //create registration object
+            //add to eventRegistration object array
+            //add to local storage
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+
+            if (!validateInput(name, email, phone)) {
+                return;
+            }
+
+            // Create a new Registration object
+            const newRegistration = new Registration(name, email, phone);
+
+            // Add it to the eventRegistration object
+            eventRegistration.addRegistration(newRegistration);
+
+            // Confirmation and reset
+            alert("Registration successful!");
+            document.getElementById("registrationForm").reset();
+
+            //console.log("in event registration");
+        }
+
+        function addRegistrationListener() {
+            const form = document.getElementById("registrationForm");
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent page reload
+                registerForEvent(); // Process registration
+            });
+
+        }
+
+        function validateInput(name, email, phone) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^\d{10}$/; // 10-digit phone number
+
+            if (!name) {
+                alert("Name is required.");
+                return false;
+            }
+            if (!emailRegex.test(email)) {
+                alert("Enter a valid email.");
+                return false;
+            }
+            if (!phoneRegex.test(phone)) {
+                alert("Enter a valid 10-digit phone number.");
+                return false;
+            }
+            return true;
+        }
+
+        function createSignInForm() {
+            //create the div
+            const signInDiv = document.createElement("div");
+            signInDiv.id = "signInDiv";
+
+            //create the form
+            const signInForm = document.createElement("form");
+            signInForm.id = "signInForm";
+            //username
+            const usernameLabel = document.createElement("label");
+            usernameLabel.textContent = "Username: ";
+            const usernameInput = document.createElement("input");
+            usernameInput.type = "text";
+            usernameInput.id = "username";
+            usernameInput.name = "username";
+            usernameInput.required = true;
+            // Password input
+            const passwordLabel = document.createElement("label");
+            passwordLabel.textContent = "Password: ";
+            const passwordInput = document.createElement("input");
+            passwordInput.type = "password";
+            passwordInput.id = "password";
+            passwordInput.name = "password";
+            passwordInput.required = true;
+            // Submit button
+            const submitButton = document.createElement("button");
+            submitButton.type = "button";
+            submitButton.textContent = "Sign In";
+            submitButton.onclick = signIn;
+
+            //append elements to the form   
+            signInForm.appendChild(usernameLabel);
+            signInForm.appendChild(usernameInput);
+            signInForm.appendChild(document.createElement("br"));
+            signInForm.appendChild(passwordLabel);
+            signInForm.appendChild(passwordInput);
+            signInForm.appendChild(document.createElement("br"));
+            signInForm.appendChild(submitButton);
+
+            // Append form to div
+            signInDiv.appendChild(signInForm);
+
+            // Append div to the container
+            const container = document.getElementById("signInContainer");
+            container.appendChild(signInDiv);
+
+        }
+
+        function signIn() {
+            const usernameInput = document.getElementById("username").value.trim();
+
+            if (membersInfo.memberUserNames.includes(usernameInput)) {
+                // Create a cookie called 'authorizedUser'
+                addCookie("authorizedUser", usernameInput); // Expires in 1 day
+                alert("Sign-In Successful!");
+
+                //remove sign in div if successful
+                const signInDiv = document.getElementById("signInDiv");
+                if (signInDiv) {
+                    signInDiv.remove();
+                }
+
+            } else {
+                alert("Invalid Username. Please try again.");
+            }
+        }
+
+        function addSignInListener() {
+            document.getElementById("signInButton").addEventListener("click", createSignInForm);
+        }
+
+        function pageSetup() {
+            currentYear();
+            incrementHitCount();
+            addRegistrationListener();
+            addSignInListener();
+        }
+    </script>
+
+
+
+
+</head>
+
+<body onload="pageSetup()">
+    <div id="container">
+        <header>
+            <h1>Science Fiction Book Club</h1>
+            <h2>"Predicting the future using or describing the future?"</h2>
+        </header>
+
+        <nav>
+            <div>
+                <a href="index.html"><button>Home Page</button></a>
+                <a href="members.html"><button>Members Page</button></a>
+            </div>
+            <button id="signInButton">Sign In</button>
+        </nav>
+
+        <div id="signInContainer"></div>
+
+        <main>
+            <section class="leftColumn">
+                <h3>Sign Up for our next Public Event</h3>
+                <form id="registrationForm">
+                    <fieldset>
+                        <p>Event Registration Form</p>
+                        <p>
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                            <span class="error" id="nameError"></span>
+                        </p>
+                        <p>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error" id="emailError"></span>
+                        </p>
+                        <p>
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" required>
+                            <span class="error" id="phoneError"></span>
+                        </p>
+                        <button id="registrationButton" type="submit">Register</button>
+                    </fieldset>
+                </form>
+
+            </section>
+            <section class="rightColumn">
+                <h3>Upcoming Events</h3>
+                <div>
+                    <h3>"Did Star Trek predict AI?"</h3>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Copyright &copy;<span id="currentYear"></span> All rights reserved.</p>
+            <p>Current Activity: <span id="hitCount"></span></p>
+        </footer>
+
+    </div>
+</body>
+
+</html>
